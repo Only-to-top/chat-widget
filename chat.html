@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  /* стили для виджета */
+  .chat-wrap{
+    position: fixed;
+    bottom: 0;
+    right: 20px;
+    background-color: #1c212a;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 0 10px rgba(0,0,0,.4);
+    color: #fff;
+    max-width: 380px;
+    font-family: RobotoLight, sans-serif;
+  }
+
+  .title-widget{
+    cursor: pointer;
+    padding: 13px;
+  }
+
+  .chat-wrap .hidden{
+    display: none;
+    padding: 10px 0;
+    font-family: RobotoLight, sans-serif;
+    background-color: #fff;
+    color: #474747;
+    padding: 13px;
+    line-height: 1.5em;
+    font-size: 15px;
+  }
+
+  .chat-wrap .hidden b{
+    display: block;
+    color: #66cd00;
+  }
+  .chat-wrap .hidden span{
+    font-weight: bold;
+    margin: 10px 0 3px 0;
+    display: block;
+  }
+  .main-form input, .main-form textarea{
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #999;
+    text-align: left;
+    width: 100%;
+    border-bottom: 1px solid #66cd00!important;
+    display: block;
+  }
+
+  .btn-send-form{
+    margin-top: 5px;
+    border: none;
+    width: 100%;
+    background-color: #66cd00;
+    padding: 15px;
+    font-size: 14px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+  } 
+
+  .main-form{
+    margin-top: 10px;
+  }
+
+  .close2{
+    position: absolute;
+    left: -30px;
+    top: -8px;
+    border-radius: 50%;
+    background: url('../img/close.svg') no-repeat center;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  @media only screen and (max-width: 576px) {
+    .chat-wrap{
+      right: 0;
+      margin: 0 5px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Чат -->
+<div class="chat-wrap">
+  <div class="title-widget" title="Напишите нам" style="text-align:right;">Связаться с нами</div>
+
+  <div class="hidden">
+    <span class="close2"></span>
+    <b>Наши контакты:</b>
+    <span>Представительство в г. Москве:</span>
+    +7 (495) 369-60-10<br>
+    105318, г. Москва, ул. Щербаковская, 3, офис 205<br>
+    partnership@itres.de<br>
+    <span>Центральный офис в г. Берлине:</span>
+    Zur Börse, 20, 10247, Berlin, Germany
+
+    <form class="main-form" id="main-form2">
+      <!-- Hidden Required Fields -->
+      <input type="hidden" name="project_name" value="Заявка с сайта sitename">
+      <input type="hidden" name="admin_email" value="sitename">
+      <!-- <input type="hidden" name="admin_email" value="<?php echo get_option('admin_email') ?>"> -->
+      <input type="hidden" name="form_subject" value="Заявка с подвала">
+      <!-- END Hidden Required Fields -->
+
+      <input type="text" name="Имя" placeholder="Имя*" required>
+      <input type="tel" name="Телефон" placeholder="Телефон*" required>
+      <textarea name="Собщение" placeholder="Собщение"></textarea>
+      <button class="btn-send-form">Отправить</button>
+    </form>
+
+  </div>
+</div>
+<!-- Чат -->
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$(function(){
+
+  //E-mail Ajax Send
+  $("#main-form, #main-form2").submit(function() { //Change
+  var th = $(this);
+  $.ajax({
+    type: "POST",
+    url: "/wp-content/themes/themename/mail.php", //for WP
+    data: th.serialize()
+  }).done(function() {
+    swal({
+      title: 'Сообщение отправлено',
+      type: 'success',
+    });
+    $('.modal, .chat-wrap .hidden').fadeOut('slow');
+    setTimeout(function() {
+      // Done Functions
+      th.trigger("reset");
+    }, 1000);
+  });
+  return false;
+  });
+
+  // виджет
+  $('.title-widget').click(function(){
+  $('.hidden').slideToggle();
+  });
+  $('.close2').click(function(){
+  $('.chat-wrap .hidden').slideToggle();
+  });
+
+});
+</script>
+
+</body>
+</html>
